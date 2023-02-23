@@ -10,8 +10,25 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
+model Planner {
+    email String  @id @unique
+    Event Event[]
+}
+
+model Event {
+    id        Int      @id @default(autoincrement())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    plannerEmail String
+    planner      Planner @relation(fields: [plannerEmail], references: [email])
+
+    date        DateTime @default(now())
+    eventName   String
+    kindOfParty String
+
+    hadBalloons Boolean
+    hadCake     Boolean
+    hadCandy    Boolean
+    hadPresents Boolean
 }
