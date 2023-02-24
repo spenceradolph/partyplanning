@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { dump } from "~/server/dump";
 
 export const eventRouter = createTRPCRouter({
 	new: publicProcedure
@@ -15,15 +16,7 @@ export const eventRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ input, ctx }) => {
-			const {
-				plannerEmail,
-				eventName,
-				kindOfParty,
-				hadBalloons,
-				hadCake,
-				hadCandy,
-				hadPresents,
-			} = input;
+			const { plannerEmail, eventName, kindOfParty, hadBalloons, hadCake, hadCandy, hadPresents } = input;
 
 			// Insert into the DB (and create user if not exists...)
 			const newEvent = await ctx.prisma.event.create({
@@ -50,11 +43,10 @@ export const eventRouter = createTRPCRouter({
 				},
 			});
 
+			// create/update a file for users to download
+			await dump();
+
 			// Get what was inserted
 			return { newEvent };
 		}),
-
-	getAll: publicProcedure.query(({ ctx }) => {
-		return ctx.prisma.event.findMany();
-	}),
 });

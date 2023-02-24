@@ -12,7 +12,9 @@ const Home: NextPage = () => {
 		<>
 			<div>
 				<h1>Party Planning App</h1>
+
 				<Link href="/new">New Event</Link>
+
 				<table>
 					<tr>
 						<td>Email</td>
@@ -29,6 +31,12 @@ const Home: NextPage = () => {
 						);
 					})}
 				</table>
+
+				{statuses.length === 0 ? null : (
+					<a download href="/files/data.json">
+						Download Data
+					</a>
+				)}
 			</div>
 		</>
 	);
